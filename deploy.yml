@@ -1,0 +1,78 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+variables:
+  environment: develop
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  resourceGroup: 'playground'
+  appName: 'standa-playground'
+  slot: 'test'
+  azureSubscription: 'Playground'  
+
+trigger:
+- master
+pr:
+- master
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+      - task: NuGetToolInstaller@1
+
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+
+      - task: VSBuild@1
+        inputs:
+          solution: '$(solution)'
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: DeployPackage
+
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops
+- stage: Deploy
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy the application
+    environment: $(environment)
+    strategy:
+      runOnce:
+        preDeploy:
+          steps:
+          - powershell: echo PreSolution $(solution)          
+        deploy:
+          steps:
+          - script: echo Test deploy succeeded
+          - powershell: echo Solution $(solution)
+          - powershell: echo $PSVersionTable.PSVersion
+          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: $(azureSubscription)
+              resourceGroupName: $(resourceGroup)
+              deploymentMethod: zipDeploy
+              deployToSlotOrASE: true
+              appName: '$(appName)'
+              slotName: '$(slot)'
+              package: $(Pipeline.Workspace)\DeployPackage
+
+#              package: $(Build.ArtifactStagingDirectory)\**\*.zip
+
+#    steps:
+#      - task: AzureWebApp@1
+#        inputs:
+#          azureSubscription: $(azureSubscription)
+#          appName: '$(appName)'
+#          package: $(Build.ArtifactStagingDirectory)/**/*.zip
