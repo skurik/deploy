@@ -67,7 +67,8 @@ stages:
               DeployToSlotOrASEFlag: true
               ResourceGroupName: $(resourceGroup)
               SlotName: $(slot)
-              Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip              
+              # It's important to specify package path in this way
+              Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
               
 #          - task: AzureWebApp@1
 #            inputs:
