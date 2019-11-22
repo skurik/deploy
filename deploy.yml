@@ -56,8 +56,7 @@ stages:
           steps:
           - script: echo Test deploy succeeded
           - powershell: echo Solution $(solution)
-          - powershell: echo $PSVersionTable.PSVersion
-          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
+          - powershell: echo $PSVersionTable.PSVersion          
           - task: AzureWebApp@1
             inputs:
               azureSubscription: $(azureSubscription)
