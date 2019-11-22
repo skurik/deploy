@@ -61,7 +61,7 @@ stages:
             inputs:
               azureSubscription: $(azureSubscription)
               resourceGroupName: $(resourceGroup)
-              deploymentMethod: zipDeploy
+              deploymentMethod: auto
               deployToSlotOrASE: true
               appName: '$(appName)'
               slotName: '$(slot)'
