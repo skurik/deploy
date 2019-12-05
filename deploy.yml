@@ -11,6 +11,7 @@ variables:
   resourceGroup: 'playground'
   appName: 'standa-playground'
   slot: 'test'
+  productionSlot: 'production'
   azureSubscription: 'Playground'  
 
 trigger:
@@ -69,7 +70,17 @@ stages:
               SlotName: $(slot)
               # It's important to specify package path in this way
               Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
-              
+
+          - task: AzureAppServiceManage@0
+            displayName: Start swap with preview
+            inputs:
+              azureSubscription: $(azureSubscription)
+              action: 'Start Swap with Preview'
+              webAppName: $(appName)
+              sourceSlot: $(slot)
+              targetSlot: $(productionSlot)
+              resourceGroupName: $(resourceGroup)
+
 #          - task: AzureWebApp@1
 #            inputs:
 #              azureSubscription: $(azureSubscription)
