@@ -72,7 +72,7 @@ stages:
               Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
 
           - task: AzureAppServiceManage@0
-            displayName: Start swap with preview
+            displayName: Start Swap With Preview
             inputs:
               azureSubscription: $(azureSubscription)
               action: 'Start Swap with Preview'
