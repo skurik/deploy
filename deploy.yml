@@ -12,7 +12,9 @@ variables:
   appName: 'standa-playground'
   slot: 'test'
   productionSlot: 'production'
-  azureSubscription: 'Playground'  
+  azureSubscription: 'Playground'
+  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
+  url: 'https://standa-playground.azurewebsites.net'
 
 trigger:
 - master
@@ -81,6 +83,23 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
               resourceGroupName: $(resourceGroup)
+
+          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
+          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
+
+          - task: AzureAppServiceManage@0
+            displayName: Complete Swap
+            inputs:
+              azureSubscription: $(azureSubscription)
+              action: 'Complete Swap'
+              webAppKind: webApp
+              webAppName: $(appName)
+              sourceSlot: $(slot)
+              targetSlot: $(productionSlot)
+              resourceGroupName: $(resourceGroup)
+
+          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
+          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
 
 #          - task: AzureWebApp@1
 #            inputs:
