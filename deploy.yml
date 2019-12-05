@@ -76,6 +76,7 @@ stages:
             inputs:
               azureSubscription: $(azureSubscription)
               action: 'Start Swap with Preview'
+              webAppKind: webApp
               webAppName: $(appName)
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
