@@ -54,12 +54,14 @@ stages:
       runOnce:
         preDeploy:
           steps:
-          - powershell: echo PreSolution $(solution)          
+          - powershell: echo PreSolution $(solution)
         deploy:
+          displayName: Deploy the application
           steps:
-          - script: echo Test deploy succeeded
-          - powershell: echo Solution $(solution)
-          - powershell: echo $PSVersionTable.PSVersion          
+          # - script: echo Test deploy succeeded
+          # - powershell: echo Solution $(solution)
+          - powershell: echo $PSVersionTable.PSVersion
+            displayName: Verify configuration
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
@@ -85,7 +87,9 @@ stages:
               resourceGroupName: $(resourceGroup)
 
           - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
-          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
+            displayName: Warm-up the application
+          #- powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
+          #  displayName: Warm-up the application
 
           - task: AzureAppServiceManage@0
             displayName: Complete Swap
@@ -99,7 +103,8 @@ stages:
               resourceGroupName: $(resourceGroup)
 
           - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
-          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
+            displayName: Verify the production web response times
+          # - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
 
 #          - task: AzureWebApp@1
 #            inputs:
