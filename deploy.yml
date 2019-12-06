@@ -56,7 +56,6 @@ stages:
           steps:
           - powershell: echo PreSolution $(solution)
         deploy:
-          displayName: Deploy the application
           steps:
           # - script: echo Test deploy succeeded
           # - powershell: echo Solution $(solution)
