@@ -60,9 +60,7 @@ stages:
           # TODO: Instead of checking out again, publish an artifact in the Build job containing what we are going to need below
           - checkout: self          
           - powershell: echo $PSVersionTable.PSVersion
-            displayName: Verify configuration      
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ MyFunction "test1 test2" }) 3 2
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(url) }) 2 5
+            displayName: Verify configuration
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
