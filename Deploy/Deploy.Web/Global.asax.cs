@@ -13,6 +13,13 @@ namespace Deploy.Web
     {
         protected void Application_Start()
         {
+            var type = Environment.GetEnvironmentVariable("WEBSITE_SITE_TYPE");
+
+            if (type == "staging")
+            {
+                throw new Exception("Staging application could not be initialized");
+            }
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
