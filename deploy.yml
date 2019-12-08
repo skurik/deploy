@@ -41,6 +41,8 @@ stages:
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
 
+      - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt
+
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
