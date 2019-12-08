@@ -1,11 +1,11 @@
 function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
-{    
+{
     do
     {
         try
         {
             $action.Invoke();
-            break;
+            return;
         }
         catch [Exception]
         {
@@ -14,4 +14,6 @@ function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
         $attempts--
         if ($attempts -gt 0) { sleep $sleepInSeconds }
     } while ($attempts -gt 0)
+
+    throw "The action failed after $attempts attempts"
 }
