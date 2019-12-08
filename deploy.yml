@@ -58,7 +58,8 @@ stages:
           steps:
           - powershell: echo PreSolution $(solution)
         deploy:
-          steps:          
+          steps:    
+          - checkout: self
           # - script: echo Test deploy succeeded
           # - powershell: echo Solution $(solution)
           - powershell: echo $PSVersionTable.PSVersion
