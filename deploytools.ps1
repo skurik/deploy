@@ -1,7 +1,5 @@
-function Retry([Action] $action)
-{
-    $attempts = 3
-    $sleepInSeconds = 5
+function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
+{    
     do
     {
         try
@@ -25,5 +23,5 @@ function MyFunction($inputArg)
 
 function DoIt($inp, $inp2)
 {
-    Retry({MyFunction "$inp $inp2"})
+    Retry({MyFunction "$inp $inp2"} 3 5)
 }
