@@ -23,5 +23,5 @@ function MyFunction($inputArg)
 
 function DoIt($inp, $inp2)
 {
-    Retry({MyFunction "$inp $inp2"} 3 5)
+    Retry({MyFunction "$inp $inp2"}, 3, 5)
 }
