@@ -63,7 +63,7 @@ stages:
           # - powershell: echo Solution $(solution)
           - powershell: echo $PSVersionTable.PSVersion
             displayName: Verify configuration
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt
+          - powershell: . $(Pipeline.Workspace)\deploytools.ps1 ; DoIt
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
