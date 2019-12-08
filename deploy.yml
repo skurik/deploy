@@ -63,8 +63,9 @@ stages:
           - checkout: self          
           - powershell: echo $PSVersionTable.PSVersion
             displayName: Verify configuration
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt "test1" "test2"
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({MyFunction "test1 test2"})
+          # - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt "test1" "test2"
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ MyFunction "test1 test2" })
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(url) })
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
