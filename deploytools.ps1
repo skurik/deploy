@@ -23,7 +23,7 @@ function MyFunction($inputArg)
     Throw $inputArg
 }
 
-function DoIt()
+function DoIt($inp, $inp2)
 {
-    Retry({MyFunction "Oh no! It happend again!"})
+    Retry({MyFunction "$inp $inp2"})
 }

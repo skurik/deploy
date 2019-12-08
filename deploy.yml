@@ -58,13 +58,12 @@ stages:
           steps:
           - powershell: echo PreSolution $(solution)
         deploy:
-          steps:    
-          - checkout: self
-          # - script: echo Test deploy succeeded
-          # - powershell: echo Solution $(solution)
+          steps:
+          # TODO: Instead of checking out again, publish an artifact in the Build job containing what we are going to need below
+          - checkout: self          
           - powershell: echo $PSVersionTable.PSVersion
             displayName: Verify configuration
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; DoIt "test1" "test2"
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
