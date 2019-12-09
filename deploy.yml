@@ -13,8 +13,7 @@ variables:
   slot: 'test'
   productionSlot: 'production'
   azureSubscription: 'Playground'
-  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
-  wrongStagingUrl: 'https://standa-playground-testtttt.azurewebsites.net'
+  stagingUrl: 'https://standa-playground-test.azurewebsitessss.net'
   url: 'https://standa-playground.azurewebsites.net'
 
 trigger:
@@ -45,7 +44,6 @@ stages:
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops
 - stage: Deploy
   jobs:
   - deployment: Deploy
@@ -79,14 +77,14 @@ stages:
             displayName: Start Swap With Preview
             inputs:
               azureSubscription: $(azureSubscription)
-              action: 'Start Swap With Preview'
+              resourceGroupName: $(resourceGroup)
               webAppKind: webApp
               webAppName: $(appName)
+              action: 'Start Swap With Preview'
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
-              resourceGroupName: $(resourceGroup)
 
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(wrongStagingUrl) }) 15 5
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
@@ -94,23 +92,21 @@ stages:
             condition: failed()
             inputs:
               azureSubscription: $(azureSubscription)
-              action: 'Cancel Swap'
+              resourceGroupName: $(resourceGroup)
               webAppKind: webApp
               webAppName: $(appName)
-              sourceSlot: $(slot)
-              targetSlot: $(productionSlot)
-              resourceGroupName: $(resourceGroup)
+              action: 'Cancel Swap'
           
           - task: AzureAppServiceManage@0
             displayName: Complete Swap
             inputs:
               azureSubscription: $(azureSubscription)
-              action: 'Complete Swap'
+              resourceGroupName: $(resourceGroup)
               webAppKind: webApp
               webAppName: $(appName)
+              action: 'Complete Swap'
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
-              resourceGroupName: $(resourceGroup)
 
-          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 3
             displayName: Verify the production web response times
