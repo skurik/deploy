@@ -20,6 +20,9 @@ function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
 
 function SendWebRequest([string] $uri)
 {
+    Write-Host "================================"
+    Write-Host "Sending a request to $uri"
     $result = Invoke-WebRequest -UseBasicParsing -URI $uri
     Write-Host $result
+    Write-Host "================================"
 }
