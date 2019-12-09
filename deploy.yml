@@ -85,25 +85,21 @@ stages:
               targetSlot: $(productionSlot)
               resourceGroupName: $(resourceGroup)
 
-          - task: AzureAppServiceManage@0
-            displayName: Restart the staging slot
-            inputs:
-              azureSubscription: $(azureSubscription)
-              webAppKind: webApp
-              webAppName: $(appName)
-              resourceGroupName: $(resourceGroup)
-              specifySlotOrASE: true
-              slot: $(slot)
-              action: Restart
-
-          # - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl) }) 15 5
           - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
             displayName: Wait for the staging slot to initialize
-          #- powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
-          #  displayName: Warm-up the application
 
-
-
+          - task: AzureAppServiceManage@0
+            displayName: Cancel Swap
+            condition: failed()
+            inputs:
+              azureSubscription: $(azureSubscription)
+              action: 'Cancel Swap'
+              webAppKind: webApp
+              webAppName: $(appName)
+              sourceSlot: $(slot)
+              targetSlot: $(productionSlot)
+              resourceGroupName: $(resourceGroup)
+          
           - task: AzureAppServiceManage@0
             displayName: Complete Swap
             inputs:
@@ -117,23 +113,3 @@ stages:
 
           - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
             displayName: Verify the production web response times
-          # - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
-
-#          - task: AzureWebApp@1
-#            inputs:
-#              azureSubscription: $(azureSubscription)
-#              resourceGroupName: $(resourceGroup)
-#              deploymentMethod: auto
-#              deployToSlotOrASE: true
-#              appName: '$(appName)'
-#              slotName: '$(slot)'
-#              package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
-
-#              package: $(Build.ArtifactStagingDirectory)\**\*.zip
-
-#    steps:
-#      - task: AzureWebApp@1
-#        inputs:
-#          azureSubscription: $(azureSubscription)
-#          appName: '$(appName)'
-#          package: $(Build.ArtifactStagingDirectory)/**/*.zip
