@@ -14,6 +14,7 @@ variables:
   productionSlot: 'production'
   azureSubscription: 'Playground'
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
+  wrongStagingUrl: 'https://standa-playground-testtttt.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
 
 trigger:
@@ -85,7 +86,7 @@ stages:
               targetSlot: $(productionSlot)
               resourceGroupName: $(resourceGroup)
 
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
+          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(wrongStagingUrl) }) 15 5
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
