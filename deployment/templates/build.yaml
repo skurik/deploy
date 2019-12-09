@@ -12,14 +12,14 @@ stages:
       - task: NuGetToolInstaller@1
       - task: NuGetCommand@2
         inputs:
-          restoreSolution: '$(solution)'
+          restoreSolution: ${{ parameters.solution }}
 
       - task: VSBuild@1
         inputs:
-          solution: ${{ solution }}
+          solution: ${{ parameters.solution }}
           msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
-          platform: ${{ buildPlatform }}
-          configuration: ${{ buildConfiguration }}
+          platform: ${{ parameters.buildPlatform }}
+          configuration: ${{ parameters.buildConfiguration }}
 
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
@@ -27,4 +27,4 @@ stages:
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-          artifactName: ${{ deploytoolsArtifact }}
+          artifactName: ${{ parameters.deploytoolsArtifact }}
