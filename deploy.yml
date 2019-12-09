@@ -85,11 +85,24 @@ stages:
               targetSlot: $(productionSlot)
               resourceGroupName: $(resourceGroup)
 
+          - task: AzureAppServiceManage@0
+            displayName: Restart the staging slot
+            inputs:
+              azureSubscription: $(azureSubscription)
+              webAppKind: webApp
+              webAppName: $(appName)
+              resourceGroupName: $(resourceGroup)
+              specifySlotOrASE: true
+              slot: $(slot)
+              action: Restart
+
           # - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl) }) 15 5
           - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
             displayName: Wait for the staging slot to initialize
           #- powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
           #  displayName: Warm-up the application
+
+
 
           - task: AzureAppServiceManage@0
             displayName: Complete Swap
