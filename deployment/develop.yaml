@@ -1,3 +1,18 @@
+variables:  
+  azureSubscription: 'Playground'
+  variables:
+  environment: develop
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  resourceGroup: 'playground'
+  appName: 'standa-playground'
+  slot: 'test'
+  productionSlot: 'production'  
+  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
+  url: 'https://standa-playground.azurewebsites.net'
+  deploytoolsArtifact: 'DeployTools'
+
 trigger:
 - master
 pr:
@@ -7,3 +22,14 @@ pool:
 
 stages:
 - template: templates/build.yaml
+- template: templates/deploy.yaml
+  parameters:
+    environment: $(environment)
+    azureSubscription: $(azureSubscription)
+    resourceGroup: $(resourceGroup)
+    appName: $(appName)
+    slot: $(slot)
+    productionSlot: $(productionSlot)
+    stagingUrl: $(stagingUrl)
+    url: $(url)
+    deploytoolsArtifact: $(deploytoolsArtifact)

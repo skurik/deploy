@@ -1,0 +1,71 @@
+parameters:
+  environment: ''
+  azureSubscription: ''
+  resourceGroup: ''
+  appName: ''
+  slot: ''
+  productionSlot: ''
+  stagingUrl: ''
+  url: ''
+  deploytoolsArtifact: ''
+
+stages:
+- stage: Deploy
+jobs:
+- deployment: Deploy
+  displayName: Deploy the application
+  environment: ${{ parameters.environment }}
+  strategy:
+    runOnce:      
+      deploy:
+        steps:          
+        - task: AzureRMWebAppDeployment@4
+          displayName: Azure App Service Deploy
+          inputs:
+            ConnectionType: AzureRM
+            ConnectedServiceName: ${{ parameters.azureSubscription }}
+            WebAppKind: webApp
+            WebAppName: ${{ parameters.appName }}
+            DeployToSlotOrASEFlag: true
+            ResourceGroupName: ${{ parameters.resourceGroup }}
+            SlotName: ${{ parameters.slot }}
+            # It's important to specify package path in this way
+            Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
+
+        - task: AzureAppServiceManage@0
+          displayName: Start Swap With Preview
+          inputs:
+            azureSubscription: ${{ parameters.azureSubscription }}
+            resourceGroupName: ${{ parameters.resourceGroup }}
+            webAppKind: webApp
+            webAppName: ${{ parameters.appName }}
+            action: 'Start Swap With Preview'
+            sourceSlot: ${{ parameters.slot }}
+            targetSlot: ${{ parameters.productionSlot }}
+        
+        - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.stagingUrl }} }) 15 5
+          displayName: Wait for the staging slot to initialize
+
+        - task: AzureAppServiceManage@0
+          displayName: Cancel Swap
+          condition: failed()
+          inputs:
+            azureSubscription: ${{ parameters.azureSubscription }}
+            resourceGroupName: ${{ parameters.resourceGroup }}
+            webAppKind: webApp
+            webAppName: ${{ parameters.appName }}
+            action: 'Cancel Swap'
+        
+        - task: AzureAppServiceManage@0
+          displayName: Complete Swap
+          inputs:
+            azureSubscription: ${{ parameters.azureSubscription }}
+            resourceGroupName: ${{ parameters.resourceGroup }}
+            webAppKind: webApp
+            webAppName: ${{ parameters.appName }}
+            action: 'Complete Swap'
+            sourceSlot: ${{ parameters.slot }}
+            targetSlot: ${{ parameters.productionSlot }}
+        
+        - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) 15 5
+          displayName: Ping the production site
