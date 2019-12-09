@@ -17,3 +17,9 @@ function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
 
     throw "The action failed after $attempts attempts"
 }
+
+function SendWebRequest([string] $uri)
+{
+    $result = Invoke-WebRequest -UseBasicParsing -URI $uri
+    Write-Host $result
+}
