@@ -86,7 +86,7 @@ stages:
               resourceGroupName: $(resourceGroup)
 
           - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl) }) 15 5
-            displayName: Wait for staging slot to initialize
+            displayName: Wait for the staging slot to initialize
           #- powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
           #  displayName: Warm-up the application
 
