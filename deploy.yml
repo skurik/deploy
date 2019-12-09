@@ -13,7 +13,7 @@ variables:
   slot: 'test'
   productionSlot: 'production'
   azureSubscription: 'Playground'
-  stagingUrl: 'https://standa-playground-test.azurewebsitessss.net'
+  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
 
 trigger:
@@ -29,7 +29,6 @@ stages:
   - job: Build
     steps:
       - task: NuGetToolInstaller@1
-
       - task: NuGetCommand@2
         inputs:
           restoreSolution: '$(solution)'
@@ -44,6 +43,11 @@ stages:
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.SourcesDirectory)\deploytools.ps1
+          artifactName: deploytools
+
 - stage: Deploy
   jobs:
   - deployment: Deploy
@@ -57,6 +61,7 @@ stages:
         deploy:
           steps:
           # TODO: Instead of checking out again, publish an artifact in the Build job containing what we are going to need below
+          
           - checkout: self          
           - powershell: echo $PSVersionTable.PSVersion
             displayName: Verify configuration
