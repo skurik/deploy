@@ -15,6 +15,7 @@ variables:
   azureSubscription: 'Playground'
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
+  deploytoolsArtifact: 'deploytools'
 
 trigger:
 - master
@@ -46,7 +47,7 @@ stages:
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-          artifactName: deploytools
+          artifactName: $(deploytoolsArtifact)
 
 - stage: Deploy
   jobs:
@@ -61,8 +62,7 @@ stages:
         deploy:
           steps:
           # TODO: Instead of checking out again, publish an artifact in the Build job containing what we are going to need below
-          
-          - checkout: self          
+          # - checkout: self
           - powershell: echo $PSVersionTable.PSVersion
             displayName: Verify configuration
           - task: AzureRMWebAppDeployment@4
@@ -89,7 +89,8 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
 
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
+          # - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
@@ -113,5 +114,6 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
 
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 3
+          # - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) 15 3
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) 15 5
             displayName: Verify the production web response times
