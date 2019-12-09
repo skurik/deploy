@@ -16,10 +16,10 @@ stages:
 
       - task: VSBuild@1
         inputs:
-          solution: '$(solution)'
+          solution: ${{ solution }}
           msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
-          platform: '$(buildPlatform)'
-          configuration: '$(buildConfiguration)'
+          platform: ${{ buildPlatform }}
+          configuration: ${{ buildConfiguration }}
 
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
@@ -27,4 +27,4 @@ stages:
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-          artifactName: $(deploytoolsArtifact)
+          artifactName: ${{ deploytoolsArtifact }}
