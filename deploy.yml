@@ -15,6 +15,7 @@ variables:
   azureSubscription: 'Playground'
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
+  deploytoolsArtifact: 'DeployTools'
 
 trigger:
 - master
@@ -29,7 +30,6 @@ stages:
   - job: Build
     steps:
       - task: NuGetToolInstaller@1
-
       - task: NuGetCommand@2
         inputs:
           restoreSolution: '$(solution)'
@@ -44,7 +44,11 @@ stages:
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.SourcesDirectory)\deploytools.ps1
+          artifactName: $(deploytoolsArtifact)
+
 - stage: Deploy
   jobs:
   - deployment: Deploy
@@ -56,11 +60,7 @@ stages:
           steps:
           - powershell: echo PreSolution $(solution)
         deploy:
-          steps:
-          # TODO: Instead of checking out again, publish an artifact in the Build job containing what we are going to need below
-          - checkout: self          
-          - powershell: echo $PSVersionTable.PSVersion
-            displayName: Verify configuration
+          steps:          
           - task: AzureRMWebAppDeployment@4
             displayName: Azure App Service Deploy
             inputs:
@@ -78,48 +78,36 @@ stages:
             displayName: Start Swap With Preview
             inputs:
               azureSubscription: $(azureSubscription)
-              action: 'Start Swap With Preview'
+              resourceGroupName: $(resourceGroup)
               webAppKind: webApp
               webAppName: $(appName)
+              action: 'Start Swap With Preview'
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
+          
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
+            displayName: Wait for the staging slot to initialize
+
+          - task: AzureAppServiceManage@0
+            displayName: Cancel Swap
+            condition: failed()
+            inputs:
+              azureSubscription: $(azureSubscription)
               resourceGroupName: $(resourceGroup)
-
-          - powershell: . $(Build.SourcesDirectory)\deploytools.ps1 ; Retry({ Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl) }) 15 5
-            displayName: Wait for staging slot to initialize
-          #- powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
-          #  displayName: Warm-up the application
-
+              webAppKind: webApp
+              webAppName: $(appName)
+              action: 'Cancel Swap'
+          
           - task: AzureAppServiceManage@0
             displayName: Complete Swap
             inputs:
               azureSubscription: $(azureSubscription)
-              action: 'Complete Swap'
+              resourceGroupName: $(resourceGroup)
               webAppKind: webApp
               webAppName: $(appName)
+              action: 'Complete Swap'
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
-              resourceGroupName: $(resourceGroup)
-
-          - powershell: Invoke-WebRequest -UseBasicParsing -URI $(url)
-            displayName: Verify the production web response times
-          # - powershell: Invoke-WebRequest -UseBasicParsing -URI $(stagingUrl)
-
-#          - task: AzureWebApp@1
-#            inputs:
-#              azureSubscription: $(azureSubscription)
-#              resourceGroupName: $(resourceGroup)
-#              deploymentMethod: auto
-#              deployToSlotOrASE: true
-#              appName: '$(appName)'
-#              slotName: '$(slot)'
-#              package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
-
-#              package: $(Build.ArtifactStagingDirectory)\**\*.zip
-
-#    steps:
-#      - task: AzureWebApp@1
-#        inputs:
-#          azureSubscription: $(azureSubscription)
-#          appName: '$(appName)'
-#          package: $(Build.ArtifactStagingDirectory)/**/*.zip
+          
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) 15 5
+            displayName: Ping the production site

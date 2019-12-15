@@ -1,0 +1,30 @@
+parameters:
+  solution: '../../**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  deploytoolsArtifact: 'DeployTools'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+      - task: NuGetToolInstaller@1
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: ${{ parameters.solution }}
+
+      - task: VSBuild@1
+        inputs:
+          solution: ${{ parameters.solution }}
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
+          platform: ${{ parameters.buildPlatform }}
+          configuration: ${{ parameters.buildConfiguration }}
+
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: DeployPackage
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.SourcesDirectory)\deploytools.ps1
+          artifactName: ${{ parameters.deploytoolsArtifact }}
