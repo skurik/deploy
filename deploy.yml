@@ -44,10 +44,13 @@ stages:
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-          artifactName: $(deploytoolsArtifact)
+      - publish: $(Build.SourcesDirectory)\deploytools.ps1
+        artifact: $(deploytoolsArtifact)
+
+      #- task: PublishPipelineArtifact@1
+      #  inputs:
+      #    targetPath: $(Build.SourcesDirectory)\deploytools.ps1
+      #    artifactName: $(deploytoolsArtifact)
 
 - stage: Deploy
   jobs:
