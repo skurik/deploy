@@ -12,6 +12,8 @@ variables:
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
   deploytoolsArtifact: 'DeployTools'
+  webRequestAttempts: 5
+  webRequestDelayInSeconds: 15
 
 trigger:
 - master
@@ -33,3 +35,5 @@ stages:
     stagingUrl: $(stagingUrl)
     url: $(url)
     deploytoolsArtifact: $(deploytoolsArtifact)
+    webRequestAttempts: $(webRequestAttempts)
+    webRequestDelayInSeconds: $(webRequestDelayInSeconds)

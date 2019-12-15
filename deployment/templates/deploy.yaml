@@ -8,6 +8,8 @@ parameters:
   stagingUrl: ''
   url: ''
   deploytoolsArtifact: ''
+  webRequestAttempts: 5
+  webRequestDelayInSeconds: 15
 
 stages:
 - stage: Deploy
@@ -43,7 +45,7 @@ stages:
               sourceSlot: ${{ parameters.slot }}
               targetSlot: ${{ parameters.productionSlot }}
           
-          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.stagingUrl }} }) 15 5
+          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.stagingUrl }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
@@ -67,5 +69,5 @@ stages:
               sourceSlot: ${{ parameters.slot }}
               targetSlot: ${{ parameters.productionSlot }}
           
-          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) 15 5
+          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
             displayName: Ping the production site
