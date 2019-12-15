@@ -85,7 +85,7 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
           
-          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) $(webRequestDelayInSeconds) $(webRequestAttempts)
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) $(webRequestAttempts) $(webRequestDelayInSeconds)
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
@@ -109,5 +109,5 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
           
-          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) $(webRequestDelayInSeconds) $(webRequestAttempts)
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) $(webRequestAttempts) $(webRequestDelayInSeconds)
             displayName: Ping the production site
