@@ -16,6 +16,8 @@ variables:
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
   deploytoolsArtifact: 'DeployTools'
+  webRequestAttempts: 5
+  webRequestDelayInSeconds: 15
 
 trigger:
 - master
@@ -46,11 +48,6 @@ stages:
 
       - publish: $(Build.SourcesDirectory)\deploytools.ps1
         artifact: $(deploytoolsArtifact)
-
-      #- task: PublishPipelineArtifact@1
-      #  inputs:
-      #    targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-      #    artifactName: $(deploytoolsArtifact)
 
 - stage: Deploy
   jobs:
@@ -88,7 +85,7 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
           
-          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) 15 5
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) $(webRequestDelayInSeconds) $(webRequestAttempts)
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
@@ -112,5 +109,5 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
           
-          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) 15 5
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(url) }) $(webRequestDelayInSeconds) $(webRequestAttempts)
             displayName: Ping the production site
