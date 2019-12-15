@@ -85,7 +85,7 @@ stages:
               sourceSlot: $(slot)
               targetSlot: $(productionSlot)
           
-          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) }) $(webRequestAttempts) $(webRequestDelayInSeconds)
+          - powershell: . $(Pipeline.Workspace)\$(deploytoolsArtifact)\deploytools.ps1 ; Retry({ SendWebRequest $(stagingUrl) } $(webRequestAttempts) $(webRequestDelayInSeconds))
             displayName: Wait for the staging slot to initialize
 
           - task: AzureAppServiceManage@0
