@@ -1,5 +1,6 @@
 function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
 {
+    $remainingAttempts = $attempts
     do
     {
         try
@@ -11,9 +12,9 @@ function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
         {
             Write-Host $_.Exception.Message
         }
-        $attempts--
-        if ($attempts -gt 0) { sleep $sleepInSeconds }
-    } while ($attempts -gt 0)
+        $remainingAttempts--
+        if ($remainingAttempts -gt 0) { sleep $sleepInSeconds }
+    } while ($remainingAttempts -gt 0)
 
     throw "The action failed after $attempts attempts"
 }
