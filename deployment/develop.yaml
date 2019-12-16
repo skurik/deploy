@@ -1,10 +1,6 @@
 variables:  
-  azureSubscription: 'Playground'
-  variables:
-  environment: develop
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  azureSubscription: 'Playground'  
+  environment: develop  
   resourceGroup: 'playground'
   appName: 'standa-playground'
   slot: 'test'
@@ -24,8 +20,8 @@ stages:
 - template: templates/build.yaml
 - template: templates/deploy.yaml
   parameters:
-    environment: $(environment)
     azureSubscription: $(azureSubscription)
+    environment: $(environment)    
     resourceGroup: $(resourceGroup)
     appName: $(appName)
     slot: $(slot)
