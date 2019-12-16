@@ -49,7 +49,7 @@ stages:
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
-          -destinationAppName pipeline-cloned-app
+          -destinationAppName "pipeline-cloned-app"
 
     # - powershell: Get-AzContext -ListAvailable
     #   displayName: Get available contexts
