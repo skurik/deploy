@@ -1,0 +1,19 @@
+variables:
+  environment: develop
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  resourceGroup: 'playground'
+  appName: 'standa-playground'
+  slot: 'test'
+  productionSlot: 'production'
+  azureSubscription: 'Playground'
+  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
+  url: 'https://standa-playground.azurewebsites.net'
+
+trigger:
+- master
+pr:
+- master
+pool:
+  vmImage: 'windows-latest'
