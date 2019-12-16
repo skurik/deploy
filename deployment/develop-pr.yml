@@ -23,6 +23,8 @@ stages:
     steps:
     - powershell: Get-AzContext -ListAvailable
       displayName: Get available contexts
+    - powershell: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
+      displayName: Get web app
 
 # - template: templates/build.yaml
 # - template: templates/deploy.yaml
