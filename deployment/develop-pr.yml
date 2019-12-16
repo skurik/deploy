@@ -1,0 +1,40 @@
+variables:  
+  azureSubscription: 'Playground'  
+  environment: develop  
+  resourceGroup: 'playground'
+  appName: 'standa-playground'
+  slot: 'test'
+  productionSlot: 'production'  
+  stagingUrl: 'https://standa-playground-test.azurewebsites.net'
+  url: 'https://standa-playground.azurewebsites.net'
+  deploytoolsArtifact: 'DeployTools'
+  webRequestAttempts: 5
+  webRequestDelayInSeconds: 15
+
+pr:
+- develop
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+- stage: Test
+  jobs:
+  - job: Test Job A
+    steps:
+    - powershell: Get-AzContext -ListAvailable
+      displayName: Get available contexts
+
+# - template: templates/build.yaml
+# - template: templates/deploy.yaml
+#   parameters:
+#     azureSubscription: $(azureSubscription)
+#     environment: $(environment)    
+#     resourceGroup: $(resourceGroup)
+#     appName: $(appName)
+#     slot: $(slot)
+#     productionSlot: $(productionSlot)
+#     stagingUrl: $(stagingUrl)
+#     url: $(url)
+#     deploytoolsArtifact: $(deploytoolsArtifact)
+#     webRequestAttempts: $(webRequestAttempts)
+#     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
