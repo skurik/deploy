@@ -10,6 +10,8 @@ variables:
   deploytoolsArtifact: 'DeployTools'
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
+  location: 'West Europe'
+  appServicePlan: 'ASP-playground-af4a'  
 
 pr:
 - develop
@@ -34,6 +36,20 @@ stages:
         azurePowerShellVersion: latestVersion
         scriptType: inlineScript
         inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
+
+    - task: AzurePowerShell@4
+      displayName: Clone Web Application
+      inputs:
+        azureSubscription: $(azureSubscription)
+        azurePowerShellVersion: latestVersion
+        scriptType: filePath
+        scriptPath: $(Build.SourcesDirectory)\cloneWebApp.ps1
+        scriptArguments:
+          -location $(location) `
+          -appServicePlan $(appServicePlan) `
+          -resourceGroup $(resourceGroup) `
+          -sourceAppName $(appName) `
+          -destinationAppName pipeline-cloned-app
 
     # - powershell: Get-AzContext -ListAvailable
     #   displayName: Get available contexts
