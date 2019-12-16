@@ -25,12 +25,14 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
+        scriptType: inlineScript
         inline: Get-AzContext -ListAvailable
 
     - task: AzurePowerShell@4
       inputs:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
+        scriptType: inlineScript
         inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
 
     # - powershell: Get-AzContext -ListAvailable
