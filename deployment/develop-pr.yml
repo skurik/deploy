@@ -19,7 +19,7 @@ pool:
 stages:
 - stage: Test
   jobs:
-  - job: Test Job A
+  - job: Test_Job_A
     steps:
     - powershell: Get-AzContext -ListAvailable
       displayName: Get available contexts
