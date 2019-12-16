@@ -45,7 +45,7 @@ stages:
         scriptType: filePath
         scriptPath: $(Build.SourcesDirectory)\cloneWebApp.ps1
         scriptArguments:
-          -location $(location) `
+          -location "$(location)" `
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
