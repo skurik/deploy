@@ -11,7 +11,9 @@ variables:
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
   location: 'West Europe'
-  appServicePlan: 'ASP-playground-af4a'  
+  appServicePlan: 'ASP-playground-af4a'
+  sqlServerName: 'standaplayground'
+  sqlDatabaseEdition: 'Standard'
 
 pr:
 - develop
@@ -23,19 +25,19 @@ stages:
   jobs:
   - job: Test_Job_A
     steps:
-    - task: AzurePowerShell@4
-      inputs:
-        azureSubscription: $(azureSubscription)
-        azurePowerShellVersion: latestVersion
-        scriptType: inlineScript
-        inline: Get-AzContext -ListAvailable
+    # - task: AzurePowerShell@4
+    #   inputs:
+    #     azureSubscription: $(azureSubscription)
+    #     azurePowerShellVersion: latestVersion
+    #     scriptType: inlineScript
+    #     inline: Get-AzContext -ListAvailable
 
-    - task: AzurePowerShell@4
-      inputs:
-        azureSubscription: $(azureSubscription)
-        azurePowerShellVersion: latestVersion
-        scriptType: inlineScript
-        inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
+    # - task: AzurePowerShell@4
+    #   inputs:
+    #     azureSubscription: $(azureSubscription)
+    #     azurePowerShellVersion: latestVersion
+    #     scriptType: inlineScript
+    #     inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
 
     - task: AzurePowerShell@4
       displayName: Clone Web Application
@@ -50,6 +52,19 @@ stages:
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
           -destinationAppName "pipeline-cloned-app"
+
+    - task: AzurePowerShell@4
+      displayName: Create SQL Database
+      inputs:
+        azureSubscription: $(azureSubscription)
+        azurePowerShellVersion: latestVersion
+        scriptType: filePath
+        scriptPath: $(Build.SourcesDirectory)\createSqlDatabase.ps1
+        scriptArguments:          
+          -resourceGroup $(resourceGroup) `
+          -serverName $(sqlServerName) `
+          -edition $(sqlDatabaseEdition)
+          -databaseName "pipeline-created-sqldb"
 
     # - powershell: Get-AzContext -ListAvailable
     #   displayName: Get available contexts
