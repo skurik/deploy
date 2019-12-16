@@ -12,6 +12,7 @@ variables:
   webRequestDelayInSeconds: 15
   location: 'West Europe'
   appServicePlan: 'ASP-playground-af4a'
+  sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
   sqlServerName: 'standaplayground'
   sqlDatabaseEdition: 'Standard'
 
@@ -61,7 +62,7 @@ stages:
         scriptType: filePath
         scriptPath: $(Build.SourcesDirectory)\createSqlDatabase.ps1
         scriptArguments:          
-          -resourceGroup $(resourceGroup) `
+          -resourceGroup $(sqlServerResourceGroup) `
           -serverName $(sqlServerName) `
           -edition $(sqlDatabaseEdition)
           -databaseName "pipeline-created-sqldb"
