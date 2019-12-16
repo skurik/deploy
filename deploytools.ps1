@@ -32,3 +32,8 @@ function SendWebRequest([string] $uri)
     Write-Host $result
     Write-Host "=============================================================================="
 }
+
+function CloneWebApp([string] $resourceGroup, [string] $sourceAppName)
+{
+
+}

@@ -21,10 +21,22 @@ stages:
   jobs:
   - job: Test_Job_A
     steps:
-    - powershell: Get-AzContext -ListAvailable
-      displayName: Get available contexts
-    - powershell: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
-      displayName: Get web app
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: $(azureSubscription)
+        azurePowerShellVersion: latestVersion
+        inline: Get-AzContext -ListAvailable
+
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: $(azureSubscription)
+        azurePowerShellVersion: latestVersion
+        inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
+
+    # - powershell: Get-AzContext -ListAvailable
+    #   displayName: Get available contexts
+    # - powershell: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
+    #   displayName: Get web app
 
 # - template: templates/build.yaml
 # - template: templates/deploy.yaml
