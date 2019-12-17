@@ -25,8 +25,8 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-- template: templates/build.yaml
-- template: templates/deploy.yaml
+- template: templates/build.yml
+- template: templates/deploy.yml
   parameters:
     azureSubscription: $(azureSubscription)
     environment: $(environment)    
