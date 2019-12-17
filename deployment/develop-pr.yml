@@ -3,6 +3,7 @@ variables:
   environment: develop  
   resourceGroup: 'playground'
   appName: 'standa-playground'
+  destinationAppName: 'pipeline-cloned-app'
   slot: 'test'
   productionSlot: 'production'  
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
@@ -14,9 +15,11 @@ variables:
   appServicePlan: 'ASP-playground-af4a'
   sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
   sqlServerName: 'pipeline-created-sqlserver'
-  sqlDatabaseEdition: 'Standard'
-  sqlServerUserName: 'MEWS-22267459-b5d6-4534-a2ba-19d4aeab28a4'
-  sqlServerPassword: '93a8c34b-ddf5-4d15-a5aa-aaa1cd6f2d1a'
+  sqlServerUserName: 'MEWS-E87C21D3-9A9F-4369-B039-4738B3CBE65F'
+  sqlServerPassword: '6E3DE82B-DF77-4C1B-8AF3-E104E7D5FBBC'
+  sqlDatabaseName: 'pipeline-created-sqldb'
+  sqlDatabaseEdition: 'Standard'  
+  connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
 
 pr:
 - develop
@@ -54,7 +57,7 @@ stages:
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
-          -destinationAppName "pipeline-cloned-app"
+          -destinationAppName $(destinationAppName)
 
     - task: AzurePowerShell@4
       displayName: Create SQL Database
@@ -70,7 +73,23 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword) `
           -edition $(sqlDatabaseEdition) `
-          -databaseName "pipeline-created-sqldb"
+          -databaseName $(sqlDatabaseName)
+
+    - task: AzurePowerShell@4
+      displayName: Update the web app settings
+      inputs:
+        azureSubscription: $(azureSubscription)
+        azurePowerShellVersion: latestVersion
+        scriptType: filePath
+        scriptPath: $(Build.SourcesDirectory)\updateWebAppSettings.ps1
+        scriptArguments:          
+          -resourceGroup $(resourceGroup) `
+          -appName $(destinationAppName) `
+          -connectionStringName $(connectionStringName) `
+          -sqlServerName $(sqlServerName) `          
+          -databaseName $(sqlDatabaseName) `
+          -serverUserName $(sqlServerUserName) `
+          -serverUserPassword $(sqlServerPassword)
 
     # - powershell: Get-AzContext -ListAvailable
     #   displayName: Get available contexts
