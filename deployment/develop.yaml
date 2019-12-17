@@ -12,6 +12,7 @@ variables:
   webRequestDelayInSeconds: 15
 
 # Comment
+# Comment 2
 
 trigger:  
   batch: true
