@@ -12,6 +12,7 @@ variables:
   webRequestDelayInSeconds: 15
 
 trigger:  
+  batch: true
   branches:
     include:
     - master
