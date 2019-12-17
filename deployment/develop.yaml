@@ -11,8 +11,13 @@ variables:
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
 
-trigger:
-- master
+trigger:  
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - notes.md
 pr:
 - master
 pool:
