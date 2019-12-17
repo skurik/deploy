@@ -1,5 +1,5 @@
 param (
-	[string] $location
+	[string] $location,
     [string] $resourceGroup,
     [string] $serverName,
     [string] $serverUserName,
