@@ -22,7 +22,7 @@ variables:
   connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
 
 pr:
-- develop
+- master
 pool:
   vmImage: 'windows-latest'
 
@@ -31,20 +31,6 @@ stages:
   jobs:
   - job: Test_Job_A
     steps:
-    # - task: AzurePowerShell@4
-    #   inputs:
-    #     azureSubscription: $(azureSubscription)
-    #     azurePowerShellVersion: latestVersion
-    #     scriptType: inlineScript
-    #     inline: Get-AzContext -ListAvailable
-
-    # - task: AzurePowerShell@4
-    #   inputs:
-    #     azureSubscription: $(azureSubscription)
-    #     azurePowerShellVersion: latestVersion
-    #     scriptType: inlineScript
-    #     inline: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
-
     - task: AzurePowerShell@4
       displayName: Clone Web Application
       inputs:
@@ -91,22 +77,21 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
 
-    # - powershell: Get-AzContext -ListAvailable
-    #   displayName: Get available contexts
-    # - powershell: Get-AzWebApp -ResourceGroupName playground -Name standa-playground
-    #   displayName: Get web app
+- template: ./templates/build.yml
+  parameters:
+    utilsPath: $(utilsPath)
+    utilsArtifact: $(utilsArtifact)
 
-# - template: templates/build.yaml
-# - template: templates/deploy.yaml
-#   parameters:
-#     azureSubscription: $(azureSubscription)
-#     environment: $(environment)    
-#     resourceGroup: $(resourceGroup)
-#     appName: $(appName)
-#     slot: $(slot)
-#     productionSlot: $(productionSlot)
-#     stagingUrl: $(stagingUrl)
-#     url: $(url)
-#     deploytoolsArtifact: $(deploytoolsArtifact)
-#     webRequestAttempts: $(webRequestAttempts)
-#     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
+- template: ./templates/deploy.yaml
+  parameters:
+    azureSubscription: $(azureSubscription)
+    environment: $(environment)    
+    resourceGroup: $(resourceGroup)
+    appName: $(destinationAppName)
+    slot: $(slot)
+    productionSlot: $(productionSlot)
+    stagingUrl: $(stagingUrl)
+    url: $(url)
+    deploytoolsArtifact: $(deploytoolsArtifact)
+    webRequestAttempts: $(webRequestAttempts)
+    webRequestDelayInSeconds: $(webRequestDelayInSeconds)
