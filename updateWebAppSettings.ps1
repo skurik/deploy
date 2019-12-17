@@ -13,4 +13,4 @@ param (
 
 $connstr = "Data Source=tcp:$sqlServerName.database.windows.net,1433;Initial Catalog=$databaseName;User ID=$serverUserName@$sqlServerName;Password=$serverUserPassword"
 
-Set-AzWebApp -ResourceGroupName $resourceGroup -Name $appName -ConnectionStrings @{ $connectionStringName = @{ Type = "SQLAzure"; Value = $connstr }
+Set-AzWebApp -ResourceGroupName $resourceGroup -Name $appName -ConnectionStrings @{ $connectionStringName = @{ Type = "SQLAzure"; Value = $connstr } }
