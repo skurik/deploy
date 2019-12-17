@@ -11,6 +11,8 @@ variables:
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
 
+# Comment
+
 trigger:  
   batch: true
   branches:
