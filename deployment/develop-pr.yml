@@ -13,8 +13,10 @@ variables:
   location: 'West Europe'
   appServicePlan: 'ASP-playground-af4a'
   sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
-  sqlServerName: 'standaplayground'
+  sqlServerName: 'pipeline-created-sqlserver'
   sqlDatabaseEdition: 'Standard'
+  sqlServerUserName: 'MEWS-22267459-b5d6-4534-a2ba-19d4aeab28a4'
+  sqlServerPassword: '93a8c34b-ddf5-4d15-a5aa-aaa1cd6f2d1a'
 
 pr:
 - develop
@@ -61,10 +63,13 @@ stages:
         azurePowerShellVersion: latestVersion
         scriptType: filePath
         scriptPath: $(Build.SourcesDirectory)\createSqlDatabase.ps1
-        scriptArguments:          
+        scriptArguments:
+          -location "$(location)" `
           -resourceGroup $(sqlServerResourceGroup) `
           -serverName $(sqlServerName) `
-          -edition $(sqlDatabaseEdition)
+          -serverUserName $(sqlServerUserName) `
+          -serverUserPassword $(sqlServerPassword) `
+          -edition $(sqlDatabaseEdition) `
           -databaseName "pipeline-created-sqldb"
 
     # - powershell: Get-AzContext -ListAvailable
