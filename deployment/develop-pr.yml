@@ -77,12 +77,12 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
 
-- template: templates/build.yml
+- template: ./templates/build.yml
   parameters:
     utilsPath: $(utilsPath)
     utilsArtifact: $(utilsArtifact)
 
-- template: templates/deploy.yaml
+- template: ./templates/deploy.yaml
   parameters:
     azureSubscription: $(azureSubscription)
     environment: $(environment)    
