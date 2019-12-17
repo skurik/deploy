@@ -82,11 +82,11 @@ stages:
         azurePowerShellVersion: latestVersion
         scriptType: filePath
         scriptPath: $(Build.SourcesDirectory)\updateWebAppSettings.ps1
-        scriptArguments:          
+        scriptArguments:
           -resourceGroup $(resourceGroup) `
           -appName $(destinationAppName) `
           -connectionStringName $(connectionStringName) `
-          -sqlServerName $(sqlServerName) `          
+          -sqlServerName $(sqlServerName) `
           -databaseName $(sqlDatabaseName) `
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
