@@ -13,8 +13,7 @@ variables:
   webRequestDelayInSeconds: 15
   location: 'West Europe'
   appServicePlan: 'ASP-playground-af4a'
-  sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
-  # sqlServerName: 'pipeline-created-sqlserver'
+  sqlServerResourceGroup: 'cloud-shell-storage-westeurope'  
   sqlServerName: 'prenv'
   sqlServerUserName: 'MEWS-E87C21D3-9A9F-4369-B039-4738B3CBE65F'
   sqlServerPassword: '6E3DE82B-DF77-4C1B-8AF3-E104E7D5FBBC'
