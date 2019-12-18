@@ -36,3 +36,7 @@ stages:
           - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
             displayName: Ping the production site
             timeoutInMinutes: 1
+
+          - script: echo Whatever
+            condition: failed()
+            displayName: Echo            
