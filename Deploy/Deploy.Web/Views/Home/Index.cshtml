@@ -40,8 +40,8 @@
         <p>@ViewBag.StackTrace</p>
     </div>
     <div>
-        <p>
-            @String.Join("<br />", ViewBag.Indexes)
-        </p>
+        <pre>
+            @String.Join("\r\n", ViewBag.Indexes)
+        </pre>
     </div>
 </div>
