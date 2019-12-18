@@ -19,6 +19,7 @@ trigger:
     include:
     - Deploy/
     - deployment/
+    - rootdevelop.yaml
 pr:
 - master
 pool:
