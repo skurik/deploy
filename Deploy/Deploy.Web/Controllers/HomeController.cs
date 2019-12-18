@@ -12,16 +12,25 @@ namespace Deploy.Web.Controllers
     {
         public ActionResult Index()
         {
-            //var connectionStringName = "mews-develop-sql-weu/mews-develop-db";
-            //var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            //ViewBag.ConnectionString = connectionString;
-            //var connection = new SqlConnection(connectionString);
-            //connection.Open();
+            var connectionStringName = "mews-develop-sql-weu/mews-develop-db";
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            ViewBag.ConnectionString = connectionString;
 
-            //using (var tx = connection.BeginTransaction())
-            //{
-            //    tx.Commit();
-            //}
+            try
+            {
+                var connection = new SqlConnection(connectionString);
+                connection.Open();
+
+                using (var tx = connection.BeginTransaction())
+                {
+                    tx.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+                ViewBag.StackTrace = e.StackTrace;
+            }
 
             return View();
         }
