@@ -82,7 +82,7 @@ stages:
     utilsPath: $(utilsPath)
     utilsArtifact: $(utilsArtifact)
 
-- template: ./templates/deploy.yaml
+- template: ./templates/deploy.yml
   parameters:
     azureSubscription: $(azureSubscription)
     environment: $(environment)    
