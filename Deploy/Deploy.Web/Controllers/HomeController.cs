@@ -39,7 +39,7 @@ namespace Deploy.Web.Controllers
                             c.[column_id] = ic.[column_id] AND
                             ic.[object_id] = c.[object_id]";
 
-                    var indexes = connection.Query<string>(sql).ToList();
+                    var indexes = connection.Query<string>(sql, transaction: tx).ToList();
                     ViewBag.Indexes = indexes;
 
                     tx.Commit();
