@@ -12,9 +12,7 @@ variables:
   webRequestDelayInSeconds: 20
 
 trigger: none
-  
-pr:
-- master
+
 pool:
   vmImage: 'windows-latest'
 
