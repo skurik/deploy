@@ -20,8 +20,6 @@ trigger:
     - Deploy/
     - deployment/
     - createSqlDatabase.ps1
-pr:
-- master
 pool:
   vmImage: 'windows-latest'
 
