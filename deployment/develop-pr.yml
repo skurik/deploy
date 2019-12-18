@@ -84,7 +84,7 @@ stages:
     utilsPath: $(utilsPath)
     utilsArtifact: $(utilsArtifact)
 
-- template: ./templates/deploy.yml
+- template: ./templates/deploy-without-preview.yml
   parameters:
     azureSubscription: $(azureSubscription)
     environment: $(environment)    
