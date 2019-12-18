@@ -37,6 +37,6 @@ stages:
             displayName: Ping the production site
             timeoutInMinutes: 10
 
-          - script: echo Slot initialization timed out
+          - script: echo Slot initialization task timed out
             condition: failed()
             displayName: Handle timeout
