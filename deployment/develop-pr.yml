@@ -46,7 +46,7 @@ stages:
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
-          -destinationAppName $(destinationAppName)
+          -destinationAppName $(destinationAppName)_$(System.PullRequest.PullRequestNumber)
 
     - task: AzurePowerShell@4
       displayName: Create SQL Database
@@ -62,7 +62,8 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword) `
           -edition $(sqlDatabaseEdition) `
-          -databaseName $(sqlDatabaseName)_$(Build.SourceVersion)
+          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber)
+          # -databaseName $(sqlDatabaseName)_$(Build.SourceVersion)
 
     - task: AzurePowerShell@4
       displayName: Update the web app settings
@@ -73,10 +74,11 @@ stages:
         scriptPath: $(Build.SourcesDirectory)\updateWebAppSettings.ps1
         scriptArguments:
           -resourceGroup $(resourceGroup) `
-          -appName $(destinationAppName) `
+          -appName $(destinationAppName)_$(System.PullRequest.PullRequestNumber) `
           -connectionStringName $(connectionStringName) `
           -sqlServerName $(sqlServerName) `
-          -databaseName $(sqlDatabaseName)_$(Build.SourceVersion) `
+          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber) `
+          # -databaseName $(sqlDatabaseName)_$(Build.SourceVersion) `
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
 
@@ -88,13 +90,11 @@ stages:
 - template: ./templates/deploy-without-preview.yml
   parameters:
     azureSubscription: $(azureSubscription)
-    environment: $(environment)    
+    environment: $(environment)
     resourceGroup: $(resourceGroup)
-    appName: $(destinationAppName)
-    #slot: $(slot)
+    appName: $(destinationAppName)_$(System.PullRequest.PullRequestNumber)
     productionSlot: $(productionSlot)
-    #stagingUrl: $(stagingUrl)
-    url: 'https://$(destinationAppName).azurewebsites.net'
+    url: 'https://$(destinationAppName)_$(System.PullRequest.PullRequestNumber).azurewebsites.net'
     deploytoolsArtifact: $(deploytoolsArtifact)
     webRequestAttempts: $(webRequestAttempts)
     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
