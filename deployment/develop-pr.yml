@@ -62,8 +62,7 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword) `
           -edition $(sqlDatabaseEdition) `
-          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber)
-          # -databaseName $(sqlDatabaseName)_$(Build.SourceVersion)
+          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber)          
 
     - task: AzurePowerShell@4
       displayName: Update the web app settings
@@ -77,8 +76,7 @@ stages:
           -appName $(destinationAppName)_$(System.PullRequest.PullRequestNumber) `
           -connectionStringName $(connectionStringName) `
           -sqlServerName $(sqlServerName) `
-          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber) `
-          # -databaseName $(sqlDatabaseName)_$(Build.SourceVersion) `
+          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber) `          
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
 
