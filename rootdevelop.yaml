@@ -11,15 +11,8 @@ variables:
   webRequestAttempts: 5
   webRequestDelayInSeconds: 20
 
-trigger:
-  branches:
-    include:
-    - master
-  paths:
-    include:
-    - Deploy/
-    - deployment/
-    - rootdevelop.yaml
+trigger: none
+  
 pr:
 - master
 pool:
