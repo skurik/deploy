@@ -27,9 +27,11 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-- stage: Test
+- stage: Infrastructure_setup
+  displayName: Set up the environment
   jobs:
-  - job: Test_Job_A
+  - job: Create_infrastructure
+    displayName: Create the infrastructure
     steps:
     - task: AzurePowerShell@4
       displayName: Clone Web Application

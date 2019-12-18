@@ -8,6 +8,8 @@ param (
     [string] $databaseName
 )
 
+Remove-AzSqlDatabase -ResourceGroupName $resourceGroup -ServerName $serverName -DatabaseName $databaseName -Force
+Remove-AzSqlServer -ResourceGroupName $resourceGroup -ServerName $serverName -Force
 
 $securePassword = ConvertTo-SecureString -String $serverUserPassword -AsPlainText -Force
 $serverCredentials = New-Object System.Management.Automation.PSCredential ($serverUserName, $securePassword)

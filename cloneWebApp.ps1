@@ -6,6 +6,8 @@ param (
     [string] $destinationAppName
  )
 
+Remove-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -Force
+
 Write-Host "Fetching the source application info"
 $srcapp = Get-AzWebApp -ResourceGroupName $resourceGroup -Name $sourceAppName
 
