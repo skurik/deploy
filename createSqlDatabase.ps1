@@ -10,12 +10,21 @@ param (
 
 try
 {
-	Remove-AzSqlDatabase -ResourceGroupName $resourceGroup -ServerName $serverName -DatabaseName $databaseName -Force
-	Remove-AzSqlServer -ResourceGroupName $resourceGroup -ServerName $serverName -Force	
+	Remove-AzSqlDatabase -ResourceGroupName $resourceGroup -ServerName $serverName -DatabaseName $databaseName -Force	
 }
 catch
 {
-  	Write-Host "Could not remove the existing SQL server or database"
+  	Write-Host "Could not remove the existing SQL database"
+  	Write-Host $_
+}
+
+try
+{
+	Remove-AzSqlServer -ResourceGroupName $resourceGroup -ServerName $serverName -Force
+}
+catch
+{
+  	Write-Host "Could not remove the existing SQL server"
   	Write-Host $_
 }
 
