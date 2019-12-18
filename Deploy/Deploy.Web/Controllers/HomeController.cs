@@ -12,9 +12,9 @@ namespace Deploy.Web.Controllers
     {
         public ActionResult Index()
         {
-            //var connectionStringName = "mews-develop-sql-weu/mews-develop-db";
-            //var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            //ViewBag.ConnectionString = connectionString;
+            var connectionStringName = "mews-develop-sql-weu/mews-develop-db";
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            ViewBag.ConnectionString = connectionString;
             //var connection = new SqlConnection(connectionString);
             //connection.Open();
 
