@@ -8,7 +8,6 @@ param (
     [string] $databaseName
 )
 
-
 $securePassword = ConvertTo-SecureString -String $serverUserPassword -AsPlainText -Force
 $serverCredentials = New-Object System.Management.Automation.PSCredential ($serverUserName, $securePassword)
 
