@@ -14,11 +14,12 @@ variables:
   location: 'West Europe'
   appServicePlan: 'ASP-playground-af4a'
   sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
-  sqlServerName: 'pipeline-created-sqlserver'
+  # sqlServerName: 'pipeline-created-sqlserver'
+  sqlServerName: 'prenv'
   sqlServerUserName: 'MEWS-E87C21D3-9A9F-4369-B039-4738B3CBE65F'
   sqlServerPassword: '6E3DE82B-DF77-4C1B-8AF3-E104E7D5FBBC'
   sqlDatabaseName: 'pipeline-created-sqldb'
-  sqlDatabaseEdition: 'Standard'  
+  sqlDatabaseEdition: 'Standard'
   connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
 
 pr:
