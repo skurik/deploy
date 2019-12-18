@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using Dapper;
 
-
 namespace Deploy.Web.Controllers
 {
     public class HomeController : Controller
