@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
 
 
 namespace Deploy.Web.Controllers
@@ -24,6 +25,23 @@ namespace Deploy.Web.Controllers
 
                 using (var tx = connection.BeginTransaction())
                 {
+                    var sql = @"
+                        SELECT 
+                            i.[name] as [Name]
+                        FROM
+                            sys.indexes i
+                        JOIN
+                            sys.index_columns ic ON
+                            i.[index_id] = ic.[index_id] AND
+                            i.[object_id] = ic.[object_id]
+                        JOIN
+                            sys.columns c ON 
+                            c.[column_id] = ic.[column_id] AND
+                            ic.[object_id] = c.[object_id]";
+
+                    var indexes = connection.Query<string>(sql).ToList();
+                    ViewBag.Indexes = indexes;
+
                     tx.Commit();
                 }
             }
