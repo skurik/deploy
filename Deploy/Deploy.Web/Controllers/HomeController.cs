@@ -17,6 +17,7 @@ namespace Deploy.Web.Controllers
             var connectionStringName = "mews-develop-sql-weu/mews-develop-db";
             var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
             ViewBag.ConnectionString = connectionString;
+            ViewBag.Indexes = new List<string>();
 
             try
             {
