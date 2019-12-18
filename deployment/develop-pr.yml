@@ -91,10 +91,10 @@ stages:
     environment: $(environment)    
     resourceGroup: $(resourceGroup)
     appName: $(destinationAppName)
-    slot: $(slot)
+    #slot: $(slot)
     productionSlot: $(productionSlot)
-    stagingUrl: $(stagingUrl)
-    url: $(url)
+    #stagingUrl: $(stagingUrl)
+    url: 'https://$(destinationAppName).azurewebsites.net'
     deploytoolsArtifact: $(deploytoolsArtifact)
     webRequestAttempts: $(webRequestAttempts)
     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
