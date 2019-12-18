@@ -1,5 +1,6 @@
 function Retry([Action] $action, [int] $attempts, [int] $sleepInSeconds)
 {
+    Start-Sleep -s 180
     Write-Host "Will wait $sleepInSeconds seconds between $attempts attempts"
     $remainingAttempts = $attempts
     do
