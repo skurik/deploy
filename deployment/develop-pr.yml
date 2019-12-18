@@ -46,7 +46,7 @@ stages:
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
-          -destinationAppName $(destinationAppName)_$(System.PullRequest.PullRequestNumber)
+          -destinationAppName $(destinationAppName)-$(System.PullRequest.PullRequestNumber)
 
     - task: AzurePowerShell@4
       displayName: Create SQL Database
@@ -62,7 +62,7 @@ stages:
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword) `
           -edition $(sqlDatabaseEdition) `
-          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber)          
+          -databaseName $(sqlDatabaseName)-$(System.PullRequest.PullRequestNumber)          
 
     - task: AzurePowerShell@4
       displayName: Update the web app settings
@@ -73,10 +73,10 @@ stages:
         scriptPath: $(Build.SourcesDirectory)\updateWebAppSettings.ps1
         scriptArguments:
           -resourceGroup $(resourceGroup) `
-          -appName $(destinationAppName)_$(System.PullRequest.PullRequestNumber) `
+          -appName $(destinationAppName)-$(System.PullRequest.PullRequestNumber) `
           -connectionStringName $(connectionStringName) `
           -sqlServerName $(sqlServerName) `
-          -databaseName $(sqlDatabaseName)_$(System.PullRequest.PullRequestNumber) `          
+          -databaseName $(sqlDatabaseName)-$(System.PullRequest.PullRequestNumber) `          
           -serverUserName $(sqlServerUserName) `
           -serverUserPassword $(sqlServerPassword)
 
@@ -90,9 +90,9 @@ stages:
     azureSubscription: $(azureSubscription)
     environment: $(environment)
     resourceGroup: $(resourceGroup)
-    appName: $(destinationAppName)_$(System.PullRequest.PullRequestNumber)
+    appName: $(destinationAppName)-$(System.PullRequest.PullRequestNumber)
     productionSlot: $(productionSlot)
-    url: 'https://$(destinationAppName)_$(System.PullRequest.PullRequestNumber).azurewebsites.net'
+    url: 'https://$(destinationAppName)-$(System.PullRequest.PullRequestNumber).azurewebsites.net'
     deploytoolsArtifact: $(deploytoolsArtifact)
     webRequestAttempts: $(webRequestAttempts)
     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
