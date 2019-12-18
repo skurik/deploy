@@ -17,6 +17,8 @@ trigger:
     include:
     - master
   paths:
+    include:    
+    - Deploy/
     exclude:
     - notes.md
 pr:
