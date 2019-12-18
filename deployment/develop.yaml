@@ -18,8 +18,8 @@ trigger:
   paths:
     include:    
     - Deploy/
-    exclude:
-    - notes.md
+    - deployment/
+    
 pr:
 - master
 pool:
