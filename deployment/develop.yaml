@@ -11,8 +11,7 @@ variables:
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
 
-trigger:  
-  batch: true
+trigger:
   branches:
     include:
     - master
