@@ -9,7 +9,7 @@ variables:
   url: 'https://standa-playground.azurewebsites.net'
   deploytoolsArtifact: 'DeployTools'
   webRequestAttempts: 5
-  webRequestDelayInSeconds: 15
+  webRequestDelayInSeconds: 20
 
 trigger:
   branches:
