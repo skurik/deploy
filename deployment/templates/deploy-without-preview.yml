@@ -2,12 +2,10 @@ parameters:
   environment: ''
   azureSubscription: ''
   resourceGroup: ''
-  appName: ''
-  slot: ''
-  productionSlot: ''
-  stagingUrl: ''
+  appName: ''  
+  productionSlot: ''  
   url: ''
-  deploytoolsArtifact: ''
+  utilsArtifact: ''
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15  
 
@@ -33,6 +31,6 @@ stages:
               SlotName: ${{ parameters.productionSlot }}
               Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
           
-          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
+          - powershell: . $(Pipeline.Workspace)\${{ parameters.utilsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
             displayName: Ping the production site
-            timeoutInMinutes: 10
+            timeoutInMinutes: 20

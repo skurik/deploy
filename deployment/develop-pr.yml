@@ -8,15 +8,13 @@ variables:
   productionSlot: 'production'
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
-  deploytoolsArtifact: 'DeployTools'
+  utilsArtifact: 'DeployUtils'
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
   location: 'West Europe'
   appServicePlan: 'ASP-playground-af4a'
   sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
-  sqlServerName: 'prenv'
-  # sqlServerUserName: 'MEWS-E87C21D3-9A9F-4369-B039-4738B3CBE65F'
-  # sqlServerPassword: '6E3DE82B-DF77-4C1B-8AF3-E104E7D5FBBC'
+  sqlServerName: 'prenv'  
   sourceDatabaseName: 'mews-develop-db'
   sqlDatabaseName: 'pipeline-created-sqldb'
   sqlDatabaseEdition: 'Standard'
@@ -41,7 +39,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: $(Build.SourcesDirectory)\cloneWebApp.ps1
+        scriptPath: ../cloneWebApp.ps1
         scriptArguments:
           -location "$(location)" `
           -appServicePlan $(appServicePlan) `
@@ -55,7 +53,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: $(Build.SourcesDirectory)\createSqlDatabase.ps1
+        scriptPath: ../createSqlDatabase.ps1
         scriptArguments:
           -location "$(location)" `
           -resourceGroup $(sqlServerResourceGroup) `
@@ -69,7 +67,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: $(Build.SourcesDirectory)\updateWebAppSettings.ps1
+        scriptPath: ../updateWebAppSettings.ps1
         scriptArguments:
           -resourceGroup $(resourceGroup) `
           -appName $(destinationAppName)-$(System.PullRequest.PullRequestNumber) `
@@ -80,7 +78,7 @@ stages:
 - template: ./templates/build.yml
   parameters:
     utilsPath: $(utilsPath)
-    utilsArtifact: $(utilsArtifact)    
+    utilsArtifact: $(utilsArtifact)
 
 - template: ./templates/deploy-without-preview.yml
   parameters:
@@ -90,6 +88,6 @@ stages:
     appName: $(destinationAppName)-$(System.PullRequest.PullRequestNumber)
     productionSlot: $(productionSlot)
     url: 'https://$(destinationAppName)-$(System.PullRequest.PullRequestNumber).azurewebsites.net'
-    deploytoolsArtifact: $(deploytoolsArtifact)
+    utilsArtifact: $(utilsArtifact)
     webRequestAttempts: $(webRequestAttempts)
-    webRequestDelayInSeconds: $(webRequestDelayInSeconds)    
+    webRequestDelayInSeconds: $(webRequestDelayInSeconds)
