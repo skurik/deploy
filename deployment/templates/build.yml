@@ -24,10 +24,5 @@ stages:
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: DeployPackage
 
-      - publish: $(Build.SourcesDirectory)\deploytools.ps1
-        artifact: ${{ parameters.deploytoolsArtifact }}
-
-      # - task: PublishPipelineArtifact@1
-      #   inputs:
-      #     targetPath: $(Build.SourcesDirectory)\deploytools.ps1
-      #     artifactName: ${{ parameters.deploytoolsArtifact }}
+      - publish: $(Build.SourcesDirectory)\utils.ps1
+        artifact: ${{ parameters.deploytoolsArtifact }}   
