@@ -21,7 +21,7 @@ variables:
   sqlDatabaseName: 'pipeline-created-sqldb'
   sqlDatabaseEdition: 'Standard'
   connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
-  
+  slotInitializationTimeoutInMinutes: 10  
 
 trigger: none
 pr:
@@ -94,3 +94,4 @@ stages:
     deploytoolsArtifact: $(deploytoolsArtifact)
     webRequestAttempts: $(webRequestAttempts)
     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
+    slotInitializationTimeoutInMinutes: $(slotInitializationTimeoutInMinutes)
