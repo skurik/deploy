@@ -60,9 +60,7 @@ stages:
         scriptArguments:
           -location "$(location)" `
           -resourceGroup $(sqlServerResourceGroup) `
-          -serverName $(sqlServerName) `
-          -serverUserName $(sqlServerUserName) `
-          -serverUserPassword $(sqlServerPassword) `
+          -serverName $(sqlServerName) `          
           -edition $(sqlDatabaseEdition) `
           -databaseName $(sqlDatabaseName)-$(System.PullRequest.PullRequestNumber)
 

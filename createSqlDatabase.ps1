@@ -2,8 +2,8 @@ param (
 	[string] $location,
     [string] $resourceGroup,
     [string] $serverName,
-    [string] $serverUserName,
-    [string] $serverUserPassword,    
+    #[string] $serverUserName,
+    #[string] $serverUserPassword,    
     [string] $edition,
     [string] $databaseName
 )
