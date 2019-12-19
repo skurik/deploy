@@ -15,5 +15,12 @@ Remove-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -For
 $srcapp = Get-AzWebApp -ResourceGroupName $resourceGroup -Name $sourceAppName
 
 Write-Host "Cloning the source application into $destinationAppName"
-# $destapp = New-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -Location $location -AppServicePlan $appServicePlan
-$destapp = New-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -Location $location -AppServicePlan $appServicePlan -SourceWebApp $srcapp
+$destapp = New-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -Location $location -AppServicePlan $appServicePlan
+
+$keySelector = [System.Func``2[Microsoft.Azure.Management.WebSites.Models.NameValuePair, string]] { $args[0].Name }
+$valueSelector = [System.Func``2[Microsoft.Azure.Management.WebSites.Models.NameValuePair, string]] { $args[0].Value }
+$appSettingsMap = [System.Linq.Enumerable]::ToDictionary($srcapp.SiteConfig.AppSettings, $keySelector, $valueSelector)
+$appSettingsHashtable = New-Object System.Collections.Hashtable($appSettingsMap)
+
+Write-Host "Copying the source app settings to the destination app"
+Set-AzWebApp -ResourceGroupName $resourceGroup -Name $destinationAppName -AppSettings $appSettingsHashtable
