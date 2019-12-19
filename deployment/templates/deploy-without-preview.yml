@@ -34,10 +34,9 @@ stages:
               SlotName: ${{ parameters.productionSlot }}              
               Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip          
           
-          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
-            displayName: Ping the production site
-            timeoutInMinutes: ${{ parameters.slotInitializationTimeoutInMinutes }}
+          #- powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
+          #  displayName: Ping the production site
+          #  timeoutInMinutes: ${{ parameters.slotInitializationTimeoutInMinutes }}
 
-          - script: echo Slot initialization task timed out
-            condition: failed()
+          - script: echo ${{ parameters.slotInitializationTimeoutInMinutes }}            
             displayName: Handle timeout
