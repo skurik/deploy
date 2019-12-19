@@ -78,7 +78,7 @@ stages:
 
 - template: ./templates/build.yml
   parameters:
-    utilsPath: $(utilsPath)
+    utilsPath: $(pipelinesDir)\utils.ps1
     utilsArtifact: $(utilsArtifact)
 
 - template: ./templates/deploy-without-preview.yml

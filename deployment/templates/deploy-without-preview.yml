@@ -31,6 +31,6 @@ stages:
               SlotName: ${{ parameters.productionSlot }}
               Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
           
-          - powershell: . $(Pipeline.Workspace)\${{ parameters.utilsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
+          - powershell: . $(Pipeline.Workspace)\${{ parameters.utilsArtifact }}\utils.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
             displayName: Ping the production site
             timeoutInMinutes: 20
