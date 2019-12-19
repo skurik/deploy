@@ -20,8 +20,7 @@ variables:
   sourceDatabaseName: 'mews-develop-db'
   sqlDatabaseName: 'pipeline-created-sqldb'
   sqlDatabaseEdition: 'Standard'
-  connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
-  slotInitializationTimeoutInMinutes: 10
+  connectionStringName: 'mews-develop-sql-weu/mews-develop-db'  
 
 trigger: none
 pr:
@@ -93,5 +92,4 @@ stages:
     url: 'https://$(destinationAppName)-$(System.PullRequest.PullRequestNumber).azurewebsites.net'
     deploytoolsArtifact: $(deploytoolsArtifact)
     webRequestAttempts: $(webRequestAttempts)
-    webRequestDelayInSeconds: $(webRequestDelayInSeconds)
-    slotInitializationTimeoutInMinutes: $(slotInitializationTimeoutInMinutes)
+    webRequestDelayInSeconds: $(webRequestDelayInSeconds)    
