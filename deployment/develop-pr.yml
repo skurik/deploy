@@ -21,7 +21,7 @@ variables:
   sqlDatabaseName: 'pipeline-created-sqldb'
   sqlDatabaseEdition: 'Standard'
   connectionStringName: 'mews-develop-sql-weu/mews-develop-db'
-  slotInitializationTimeoutInMinutes: 10  
+  slotInitializationTimeoutInMinutes: '10'
 
 trigger: none
 pr:
@@ -82,6 +82,7 @@ stages:
   parameters:
     utilsPath: $(utilsPath)
     utilsArtifact: $(utilsArtifact)
+    slotInitializationTimeoutInMinutes: $(slotInitializationTimeoutInMinutes)
 
 - template: ./templates/deploy-without-preview.yml
   parameters:

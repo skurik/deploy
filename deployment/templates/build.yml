@@ -3,12 +3,16 @@ parameters:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   deploytoolsArtifact: 'DeployTools'
+  slotInitializationTimeoutInMinutes: 20
 
 stages:
 - stage: Build
   jobs:
   - job: Build
     steps:
+      - script: echo ${{ parameters.slotInitializationTimeoutInMinutes }}
+        displayName: Handle timeout
+
       - task: NuGetToolInstaller@1
       - task: NuGetCommand@2
         inputs:

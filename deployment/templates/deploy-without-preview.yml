@@ -10,7 +10,7 @@ parameters:
   deploytoolsArtifact: ''
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
-  slotInitializationTimeoutInMinutes: 20
+  slotInitializationTimeoutInMinutes: '20'
 
 stages:
 - stage: Deploy
@@ -31,12 +31,12 @@ stages:
               WebAppName: ${{ parameters.appName }}
               DeployToSlotOrASEFlag: true
               ResourceGroupName: ${{ parameters.resourceGroup }}
-              SlotName: ${{ parameters.productionSlot }}              
-              Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip          
+              SlotName: ${{ parameters.productionSlot }}
+              Package: $(Pipeline.Workspace)\DeployPackage\**\*.zip
           
-          #- powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
-          #  displayName: Ping the production site
-          #  timeoutInMinutes: ${{ parameters.slotInitializationTimeoutInMinutes }}
+          - powershell: . $(Pipeline.Workspace)\${{ parameters.deploytoolsArtifact }}\deploytools.ps1 ; Retry({ SendWebRequest ${{ parameters.url }} }) ${{ parameters.webRequestAttempts }} ${{ parameters.webRequestDelayInSeconds }}
+            displayName: Ping the production site
+            timeoutInMinutes: ${{ parameters.slotInitializationTimeoutInMinutes }}
 
-          - script: echo ${{ parameters.slotInitializationTimeoutInMinutes }}            
+          - script: echo ${{ parameters.slotInitializationTimeoutInMinutes }}
             displayName: Handle timeout
