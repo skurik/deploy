@@ -9,6 +9,7 @@ variables:
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
   url: 'https://standa-playground.azurewebsites.net'
   utilsArtifact: 'DeployUtils'
+  pipelinesDir: $(Build.SourcesDirectory)
   webRequestAttempts: 5
   webRequestDelayInSeconds: 15
   location: 'West Europe'
@@ -39,7 +40,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: ../cloneWebApp.ps1
+        scriptPath: $(pipelinesDir)\cloneWebApp.ps1
         scriptArguments:
           -location "$(location)" `
           -appServicePlan $(appServicePlan) `
@@ -53,7 +54,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: ../createSqlDatabase.ps1
+        scriptPath: $(pipelinesDir)\createSqlDatabase.ps1
         scriptArguments:
           -location "$(location)" `
           -resourceGroup $(sqlServerResourceGroup) `
@@ -67,7 +68,7 @@ stages:
         azureSubscription: $(azureSubscription)
         azurePowerShellVersion: latestVersion
         scriptType: filePath
-        scriptPath: ../updateWebAppSettings.ps1
+        scriptPath: $(pipelinesDir)\updateWebAppSettings.ps1
         scriptArguments:
           -resourceGroup $(resourceGroup) `
           -appName $(destinationAppName)-$(System.PullRequest.PullRequestNumber) `
