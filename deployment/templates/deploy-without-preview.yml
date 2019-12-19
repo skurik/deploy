@@ -9,8 +9,7 @@ parameters:
   url: ''
   deploytoolsArtifact: ''
   webRequestAttempts: 5
-  webRequestDelayInSeconds: 15
-  slotInitializationTimeoutInMinutes: '20'
+  webRequestDelayInSeconds: 15  
 
 stages:
 - stage: Deploy
