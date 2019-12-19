@@ -2,7 +2,7 @@ parameters:
   solution: '../../**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  deploytoolsArtifact: 'DeployTools'  
+  utilsArtifact: 'DeployTools'  
 
 stages:
 - stage: Build
@@ -25,4 +25,4 @@ stages:
         artifact: DeployPackage
 
       - publish: $(Build.SourcesDirectory)\utils.ps1
-        artifact: ${{ parameters.deploytoolsArtifact }}   
+        artifact: ${{ parameters.utilsArtifact }}
