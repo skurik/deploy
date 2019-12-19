@@ -2,8 +2,8 @@ variables:
   azureSubscription: 'Playground'  
   environment: develop  
   resourceGroup: 'playground'
-  appName: 'standa-playground'
-  destinationAppName: 'pipeline-cloned-app'
+  appName: 'standa-playground'  
+  destinationAppName: 'pipeline-cloned-app-$(System.PullRequest.PullRequestNumber)'
   slot: 'test'
   productionSlot: 'production'
   stagingUrl: 'https://standa-playground-test.azurewebsites.net'
@@ -17,7 +17,7 @@ variables:
   sqlServerResourceGroup: 'cloud-shell-storage-westeurope'
   sqlServerName: 'prenv'  
   sourceDatabaseName: 'mews-develop-db'
-  sqlDatabaseName: 'pipeline-created-sqldb'
+  sqlDatabaseName: 'pipeline-created-sqldb-$(System.PullRequest.PullRequestNumber)'
   sqlDatabaseEdition: 'Standard'
   connectionStringName: 'mews-develop-sql-weu/mews-develop-db'  
 
@@ -46,7 +46,7 @@ stages:
           -appServicePlan $(appServicePlan) `
           -resourceGroup $(resourceGroup) `
           -sourceAppName $(appName) `
-          -destinationAppName $(destinationAppName)-$(System.PullRequest.PullRequestNumber)
+          -destinationAppName $(destinationAppName)
 
     - task: AzurePowerShell@4
       displayName: Create SQL Database
@@ -60,7 +60,7 @@ stages:
           -resourceGroup $(sqlServerResourceGroup) `
           -serverName $(sqlServerName) `          
           -edition $(sqlDatabaseEdition) `
-          -databaseName $(sqlDatabaseName)-$(System.PullRequest.PullRequestNumber)
+          -databaseName $(sqlDatabaseName)
 
     - task: AzurePowerShell@4
       displayName: Update the web app settings
@@ -71,10 +71,10 @@ stages:
         scriptPath: $(pipelinesDir)\updateWebAppSettings.ps1
         scriptArguments:
           -resourceGroup $(resourceGroup) `
-          -appName $(destinationAppName)-$(System.PullRequest.PullRequestNumber) `
+          -appName $(destinationAppName) `
           -connectionStringName $(connectionStringName) `
           -sourceDatabaseName $(sourceDatabaseName) `
-          -databaseName $(sqlDatabaseName)-$(System.PullRequest.PullRequestNumber)
+          -databaseName $(sqlDatabaseName)
 
 - template: ./templates/build.yml
   parameters:
@@ -86,9 +86,9 @@ stages:
     azureSubscription: $(azureSubscription)
     environment: $(environment)
     resourceGroup: $(resourceGroup)
-    appName: $(destinationAppName)-$(System.PullRequest.PullRequestNumber)
+    appName: $(destinationAppName)
     productionSlot: $(productionSlot)
-    url: 'https://$(destinationAppName)-$(System.PullRequest.PullRequestNumber).azurewebsites.net'
+    url: 'https://$(destinationAppName).azurewebsites.net'
     utilsArtifact: $(utilsArtifact)
     webRequestAttempts: $(webRequestAttempts)
     webRequestDelayInSeconds: $(webRequestDelayInSeconds)
