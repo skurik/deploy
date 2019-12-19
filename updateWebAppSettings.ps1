@@ -2,7 +2,7 @@ param (
     [string] $resourceGroup,
     [string] $appName,
     [string] $connectionStringName,
-    [string] $sourceDatabaseName
+    [string] $sourceDatabaseName,
     [string] $databaseName
 )
 
